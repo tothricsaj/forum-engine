@@ -1,0 +1,14 @@
+:root {
+  --light-green: #53DF8F;
+  --dark-green: #6D9B7C;
+  --white-green: #F1FCF4;
+  --grey-green: #D9EDDF;
+}
+
+html, body {
+  background-color: var(--grey-green);
+}
+
+h2 {
+  color: var(--dark-green);
+}
