@@ -1,0 +1,9 @@
+form {
+  background-color: var(--dark-green);
+  width: 400px;
+  padding: 20px;
+}
+
+button {
+  border: unset;
+}

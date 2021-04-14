@@ -20,14 +20,12 @@ app.use(express.static('public'))
 
 app.use(bodyParser.urlencoded({extended: false}))
 
-app.use(createTables)
-
-let counter = 0
-
 app.get('/', (req, res, next) => {
-  counter++
-  console.log(`home is called ${counter} times!`)
   res.render('home')
+})
+
+app.get('/registration', (req, res, next) => {
+  res.render('registration')
 })
 
 app.listen(port)
