@@ -3,6 +3,8 @@ require('dotenv').config()
 const express = require('express')
 const bodyParser = require('body-parser')
 
+const db = require('./util/database')
+
 const createTables = require('./util/createTables')
 
 const app = express()
@@ -26,6 +28,20 @@ app.get('/', (req, res, next) => {
 
 app.get('/registration', (req, res, next) => {
   res.render('registration')
+})
+
+app.post('/registration', (req, res, next) => {
+  const userName = req.body.userName
+  const email = req.body.email
+
+  const insertQuery = `
+    INSERT INTO user_profile (user_name, email) VALUES ($1, $2);
+  `
+
+  db
+    .query(insertQuery, [userName, email])
+    .then(() => res.redirect('/'))
+    .catch(err => console.log(err))
 })
 
 app.listen(port)
