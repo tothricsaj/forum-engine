@@ -1,14 +1,17 @@
 <%- include('includes/head.ejs') %> 
 <link rel="stylesheet" href="./css/form.css">
+<link rel="stylesheet" href="./css/topic.css">
 </head>
 <body>
   <%- include('includes/navigation.ejs') %> 
   <h2>Forum engine</h2>
 
   <div class="button" id="add-btn">+</div>
-  <ul>
+  <ul class="topic">
     <% topics.forEach(topic => { %> 
-      <li><%= topic.topic_name %> </li>
+      <li class="topic__item">
+        <h2 class="topic__name"><%= topic.topic_name %></h2>
+      </li>
     <% }) %> 
   </ul>
   <div class="modal" id="add-topic">
