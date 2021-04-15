@@ -14,6 +14,15 @@
   cursor: pointer;
 }
 
+.topic__item  a {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  justify-content: flex-start;
+  align-items: center;
+}
+
 .topic__name {
   color: var(--white-green);
+  margin: 0;
 }

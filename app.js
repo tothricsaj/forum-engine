@@ -26,7 +26,6 @@ app.get('/', (req, res, next) => {
   db
     .query('SELECT * FROM topic LIMIT 10')
     .then(dbRes => {
-      console.log(dbRes)
       res.render('home', {
         topics: dbRes.rows
       })
@@ -42,6 +41,24 @@ app.post('/add-topic', (req, res, next) => {
       [topicName]
     )
     .then(() => res.redirect('/'))
+    .catch(err => console.log(err))
+})
+
+app.get('/topic/:name/:id', (req, res, next) => {
+  const topicId = req.params.id
+  const topicName = req.params.name
+  db
+    .query(`
+      SELECT * FROM comment
+      WHERE topic_id=${topicId}
+    `)
+    .then(dbRes => {
+      console.log(dbRes.rows)
+      res.render('comment', {
+        name: topicName,
+        comments: dbRes.rows
+      })
+    })
     .catch(err => console.log(err))
 })
 

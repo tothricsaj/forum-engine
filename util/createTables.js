@@ -14,8 +14,16 @@ const createTables = () => {
     );
 
     CREATE TABLE IF NOT EXISTS topic (
-      topic_id   serial PRIMARY KEY ,
+      topic_id   serial PRIMARY KEY,
       topic_name varchar(70) NOT NULL
+    );
+
+    CREATE TABLE IF NOT EXISTS comment (   
+      comment_id serial PRIMARY KEY,
+      title      varchar(255) NOT NULL,
+      comment_txt text NOT NULL,
+      topic_id   integer NOT NULL,
+      FOREIGN KEY(topic_id) REFERENCES topic(topic_id)
     );
     COMMIT;
   `

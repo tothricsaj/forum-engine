@@ -10,7 +10,9 @@
   <ul class="topic">
     <% topics.forEach(topic => { %> 
       <li class="topic__item">
-        <h2 class="topic__name"><%= topic.topic_name %></h2>
+        <a href="/topic/<%= topic.topic_name %>/<%= topic.topic_id %> ">
+          <h2 class="topic__name"><%= topic.topic_name %></h2>
+        </a>
       </li>
     <% }) %> 
   </ul>
