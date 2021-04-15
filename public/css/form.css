@@ -6,4 +6,5 @@ form {
 
 button {
   border: unset;
+  cursor: pointer;
 }

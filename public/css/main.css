@@ -18,6 +18,19 @@ a {
   text-decoration: unset;
 }
 
+.modal {
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: none; /* shuld flex if it is visible */
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, .5);
+  z-index: 100;
+}
+
 .navigation {
   width: 100%;
   height: 80px;
@@ -51,6 +64,7 @@ a {
   align-items: center;
   background-color: var(--btn-bg);
   color: var(--white-green);
+  cursor: pointer;
 }
 
 .button a {

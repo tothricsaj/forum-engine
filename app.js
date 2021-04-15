@@ -23,7 +23,15 @@ app.use(express.static('public'))
 app.use(bodyParser.urlencoded({extended: false}))
 
 app.get('/', (req, res, next) => {
-  res.render('home')
+  db
+    .query('SELECT * FROM topic LIMIT 10')
+    .then(dbRes => {
+      console.log(dbRes)
+      res.render('home', {
+        topics: [{topic_name: 'foo'}]
+      })
+    })
+    .catch(err => console.log(err))
 })
 
 app.get('/registration', (req, res, next) => {
