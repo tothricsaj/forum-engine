@@ -28,9 +28,20 @@ app.get('/', (req, res, next) => {
     .then(dbRes => {
       console.log(dbRes)
       res.render('home', {
-        topics: [{topic_name: 'foo'}]
+        topics: dbRes.rows
       })
     })
+    .catch(err => console.log(err))
+})
+
+app.post('/add-topic', (req, res, next) => {
+  const topicName = req.body.topicName
+  db
+    .query(
+      'INSERT INTO topic (topic_name) VALUES ($1)',
+      [topicName]
+    )
+    .then(() => res.redirect('/'))
     .catch(err => console.log(err))
 })
 
