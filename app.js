@@ -53,7 +53,6 @@ app.get('/topic/:name/:id', (req, res, next) => {
       WHERE topic_id=${topicId}
     `)
     .then(dbRes => {
-      console.log(dbRes.rows)
       res.render('comment', {
         topicName: topicName,
         topicId: topicId,
