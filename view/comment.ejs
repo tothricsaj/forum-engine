@@ -1,7 +1,51 @@
 <%- include('includes/head.ejs') %> 
 <link rel="stylesheet" href="./css/form.css">
+<link rel="stylesheet" href="./css/comment.css">
 </head>
 <body>
   <%- include('includes/navigation.ejs') %> 
-  <h2><%= name %> </h2>
+  <h2><%= topicName %> </h2>
+
+  <div class="button" id="add-btn">+</div>
+
+  <ul class="comment">
+    <% comments.forEach(comment => { %> 
+      <li class="comment__item">
+        <div class="comment__title"><%= comment.title %></div>
+        <div class="comment__user-info">
+          <span class="comment__user"><%= comment.owner %></span> | <%= comment.created_at %>
+        </div>
+        <div class="comment__txt"><%= comment.comment_txt %> </div>
+      </li>
+    <% }) %> 
+  </ul>
+  <div class="modal" id="add-topic">
+    <form action="/add-comment" method="POST">
+      <div>
+        <div>
+          <label for="title">Title</label>
+          <input type="text" name="title">
+        </div>
+        <div>
+          <textarea name="commentTxt" cols="30" rows="10"></textarea>
+        </div>
+
+        <input type="hidden" name="owner" value="test_user">
+        <input type="hidden" name="topicId" value="<%= topicId %> ">
+        <input type="hidden" name="redirectURL" value="/topic/<%= topicName %>/<%= topicId %>">
+
+        <div style="width: 100%; display: flex; justify-content: space-between; margin-top: 10px;">
+          <div class="button" style="position: relative;">
+            Add comment
+            <button
+              type="submit"
+              style="width: 100%; height: 100%; opacity: 0; position: absolute; top: 0; left: 0; z-index: 1;"
+            ></button>
+          </div>
+          <div class="button" id="cancel-btn">Cancel</div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <script src="./js/toggle-modal.js"></script>
 </body>

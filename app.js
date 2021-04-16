@@ -32,7 +32,7 @@ app.get('/', (req, res, next) => {
     })
     .catch(err => console.log(err))
 })
-
+// TODO(tothricsaj): eliminate whitespaces from url (topic name)
 app.post('/add-topic', (req, res, next) => {
   const topicName = req.body.topicName
   db
@@ -55,10 +55,27 @@ app.get('/topic/:name/:id', (req, res, next) => {
     .then(dbRes => {
       console.log(dbRes.rows)
       res.render('comment', {
-        name: topicName,
+        topicName: topicName,
+        topicId: topicId,
         comments: dbRes.rows
       })
     })
+    .catch(err => console.log(err))
+})
+
+app.post('/add-comment', (req, res, next) => {
+  const title = req.body.title
+  const commentTxt = req.body.commentTxt
+  const owner = req.body.owner
+  const topicId = req.body.topicId
+  const redirectURL = req.body.redirectURL
+
+  db
+    .query(
+      `INSERT INTO comment (title, comment_txt, owner, topic_id) VALUES ($1, $2, $3, $4);`,
+      [title, commentTxt, owner, topicId]
+    )
+    .then(() => res.redirect(redirectURL))
     .catch(err => console.log(err))
 })
 

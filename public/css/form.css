@@ -8,3 +8,7 @@ button {
   border: unset;
   cursor: pointer;
 }
+
+textarea {
+  width: 100%;
+}

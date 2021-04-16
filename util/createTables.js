@@ -9,7 +9,7 @@ const createTables = () => {
     BEGIN;
     CREATE TABLE IF NOT EXISTS user_profile (
       user_id    serial PRIMARY KEY,
-      user_name  varchar(70) NOT NULL,
+      user_name  varchar(70) NOT NULL UNIQUE,
       email      varchar(255) NOT NULL
     );
 
@@ -22,8 +22,9 @@ const createTables = () => {
       comment_id serial PRIMARY KEY,
       title      varchar(255) NOT NULL,
       comment_txt text NOT NULL,
-      topic_id   integer NOT NULL,
-      FOREIGN KEY(topic_id) REFERENCES topic(topic_id)
+      owner      varchar(70) NOT NULL REFERENCES user_profile(user_name),
+      created_at     timestamp DEFAULT CURRENT_TIMESTAMP,
+      topic_id   integer NOT NULL REFERENCES topic(topic_id)
     );
     COMMIT;
   `

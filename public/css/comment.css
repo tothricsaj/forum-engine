@@ -1,0 +1,39 @@
+.comment {
+  width: calc(100% - 14px);
+  border: 1px solid var(--dark-green);
+  list-style-type: none;
+  padding: 5px;
+}
+
+.comment__item {
+  width: calc(100% - 10px);
+  margin: 15px 0;
+  padding: 5px;
+  background-color: var(--dark-green);
+}
+
+.comment__user-info {
+  border-bottom: 1px solid var(--white-green);
+  padding: 5px 0;
+  margin-bottom: 10px;
+  color: var(--white-green);
+}
+
+.comment__user {
+  font-weight: bold;
+}
+
+.comment__title {
+  border-bottom: 1px solid var(--white-green);
+  margin-bottom: 10px;
+  font-size: 20px;
+  font-weight: bold;
+  color: var(--white-green);
+}
+
+.comment__txt {
+  padding: 15px 0;
+  border-top: 1px solid var(--white-green);
+  border-bottom: 1px solid var(--white-green);
+  color: var(--white-green);
+}
