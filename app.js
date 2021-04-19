@@ -4,6 +4,7 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const session = require('express-session')
 const pgSession = require('connect-pg-simple')(session)
+const bcrypt = require('bcryptjs')
 
 const db = require('./util/database')
 
@@ -44,8 +45,31 @@ app.get('/', (req, res, next) => {
     })
     .catch(err => console.log(err))
 })
+
 app.get('/login', (req, res, next) => {
   res.render('login')
+})
+
+app.post('/login', (req, res, next) => {
+  const userName = req.body.userName
+  const password = req.body.password
+
+  let user
+
+  db
+    .query(
+      'SELECT user_name, password FROM user_profile WHERE user_name=($1)',
+      [userName]
+    )
+    .then(dbRes => {
+      console.log(dbRes.rows)
+      user = dbRes.rows
+      if(!!user) {
+        return user
+      }
+      res.redirect('/')
+    })
+    .catch(err => console.log(err))
 })
 
 // TODO(tothricsaj): eliminate whitespaces from url (topic name)
@@ -103,13 +127,28 @@ app.post('/registration', (req, res, next) => {
   const email = req.body.email
   const password = req.body.password
 
-  const insertQuery = `
-    INSERT INTO user_profile (user_name, email, password) VALUES ($1, $2, $3);
-  `
+  let hashedPass
 
-  db
-    .query(insertQuery, [userName, email, password])
-    .then(() => res.redirect('/'))
+  bcrypt.hash(password, 12)
+    .then(hashedPassword => {
+      hashedPass = hashedPassword
+      return db.query('SELECT email FROM user_profile WHERE email=($1)', [email])
+    })
+    .then(dbRes => {
+      const userEmail = dbRes.rows[0] ? dbRes.rows[0].email : 'not exist'
+      if(userEmail === email) {
+        console.log('Existing email')
+        return res.redirect('/registration')
+      } else {
+        const insertQuery = `
+          INSERT INTO user_profile (user_name, email, password) VALUES ($1, $2, $3);
+        `
+        db
+          .query(insertQuery, [userName, email, hashedPass])
+
+        return res.redirect('/')
+      }
+    })
     .catch(err => console.log(err))
 })
 
