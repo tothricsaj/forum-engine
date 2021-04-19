@@ -2,6 +2,8 @@ require('dotenv').config()
 
 const express = require('express')
 const bodyParser = require('body-parser')
+const session = require('express-session')
+const pgSession = require('connect-pg-simple')(session)
 
 const db = require('./util/database')
 
@@ -21,13 +23,23 @@ app.set('views', 'view')
 app.use(express.static('public'))
 
 app.use(bodyParser.urlencoded({extended: false}))
+app.use(
+  session({
+    store: new pgSession({
+      pool: db
+    }),
+    secret: 'cat tourch',
+    resave: false,
+    saveUninitialized: false
+  })
+)
 
 app.get('/', (req, res, next) => {
   db
     .query('SELECT * FROM topic LIMIT 10')
     .then(dbRes => {
       res.render('home', {
-        topics: dbRes.rows
+        topics: dbRes.rows,
       })
     })
     .catch(err => console.log(err))
