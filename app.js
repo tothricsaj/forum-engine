@@ -44,6 +44,10 @@ app.get('/', (req, res, next) => {
     })
     .catch(err => console.log(err))
 })
+app.get('/login', (req, res, next) => {
+  res.render('login')
+})
+
 // TODO(tothricsaj): eliminate whitespaces from url (topic name)
 app.post('/add-topic', (req, res, next) => {
   const topicName = req.body.topicName
@@ -97,13 +101,14 @@ app.get('/registration', (req, res, next) => {
 app.post('/registration', (req, res, next) => {
   const userName = req.body.userName
   const email = req.body.email
+  const password = req.body.password
 
   const insertQuery = `
-    INSERT INTO user_profile (user_name, email) VALUES ($1, $2);
+    INSERT INTO user_profile (user_name, email, password) VALUES ($1, $2, $3);
   `
 
   db
-    .query(insertQuery, [userName, email])
+    .query(insertQuery, [userName, email, password])
     .then(() => res.redirect('/'))
     .catch(err => console.log(err))
 })
