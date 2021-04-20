@@ -5,14 +5,18 @@ const bodyParser = require('body-parser')
 const session = require('express-session')
 const pgSession = require('connect-pg-simple')(session)
 const bcrypt = require('bcryptjs')
+const csrf = require('csurf')
 
 const db = require('./util/database')
+const isAuth = require('./middleware/isAuth')
 
 const createTables = require('./util/createTables')
 
 const app = express()
 
 const port = 3007
+
+const csrfProtection = csrf()
 
 if(!(process.env.CREATED_DB_TABLES === 'created')) {
   createTables()
@@ -35,8 +39,11 @@ app.use(
   })
 )
 
+app.use(csrfProtection)
+
 app.use((req, res, next) => {
   res.locals.isAuthenticated = req.session.isLogged
+  res.locals.csrfToken = req.csrfToken()
   next()
 })
 
@@ -106,7 +113,7 @@ app.get('/logout', (req, res, next) => {
 })
 
 // TODO(tothricsaj): eliminate whitespaces from url (topic name)
-app.post('/add-topic', (req, res, next) => {
+app.post('/add-topic', isAuth, (req, res, next) => {
   const topicName = req.body.topicName
   db
     .query(
@@ -117,7 +124,7 @@ app.post('/add-topic', (req, res, next) => {
     .catch(err => console.log(err))
 })
 
-app.get('/topic/:name/:id', (req, res, next) => {
+app.get('/topic/:name/:id', isAuth, (req, res, next) => {
   const topicId = req.params.id
   const topicName = req.params.name
   db
@@ -135,7 +142,7 @@ app.get('/topic/:name/:id', (req, res, next) => {
     .catch(err => console.log(err))
 })
 
-app.post('/add-comment', (req, res, next) => {
+app.post('/add-comment', isAuth, (req, res, next) => {
   const title = req.body.title
   const commentTxt = req.body.commentTxt
   const owner = req.body.owner
