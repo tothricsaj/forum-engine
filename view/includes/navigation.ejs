@@ -1,7 +1,11 @@
 <nav class="navigation">
   <h2><a href="/">Home</a></h2>
   <ul>
-    <li class="button"><a href="/login">Login</a></li>
+    <% if(isAuthenticated) { %> 
+      <li class="button"><a href="/logout">Logout</a></li>
+    <% } else { %> 
+      <li class="button"><a href="/login">Login</a></li>
+    <% } %> 
     <li class="button"><a href="/registration">Registration</a></li>
   </ul>
 </nav>

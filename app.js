@@ -35,6 +35,11 @@ app.use(
   })
 )
 
+app.use((req, res, next) => {
+  res.locals.isAuthenticated = req.session.isLogged
+  next()
+})
+
 app.get('/', (req, res, next) => {
   if(req.session.isLogged) {
     db
@@ -42,6 +47,7 @@ app.get('/', (req, res, next) => {
       .then(dbRes => {
         return res.render('home', {
           topics: dbRes.rows,
+          userName: req.session.userName
         })
       })
       .catch(err => console.log(err))
@@ -86,6 +92,17 @@ app.post('/login', (req, res, next) => {
       res.redirect('/login')
     })
     .catch(err => console.log(err))
+})
+
+app.get('/logout', (req, res, next) => {
+  req.session.destroy(err => {
+    if(err) console.log(err)
+
+    // this is not working.
+    // pgSession.close()
+
+    res.redirect('/login')
+  })
 })
 
 // TODO(tothricsaj): eliminate whitespaces from url (topic name)
