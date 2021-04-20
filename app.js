@@ -36,14 +36,19 @@ app.use(
 )
 
 app.get('/', (req, res, next) => {
-  db
-    .query('SELECT * FROM topic LIMIT 10')
-    .then(dbRes => {
-      res.render('home', {
-        topics: dbRes.rows,
+  if(req.session.isLogged) {
+    db
+      .query('SELECT * FROM topic LIMIT 10')
+      .then(dbRes => {
+        return res.render('home', {
+          topics: dbRes.rows,
+        })
       })
-    })
-    .catch(err => console.log(err))
+      .catch(err => console.log(err))
+  } else {
+    res.redirect('/login')
+  }
+
 })
 
 app.get('/login', (req, res, next) => {
@@ -62,12 +67,23 @@ app.post('/login', (req, res, next) => {
       [userName]
     )
     .then(dbRes => {
-      console.log(dbRes.rows)
-      user = dbRes.rows
+      console.log(dbRes.rows[0])
+      user = dbRes.rows[0]
       if(!!user) {
-        return user
+        return bcrypt.compare(password, user.password)
       }
-      res.redirect('/')
+      res.redirect('/login')
+    })
+    .then(doMatch => {
+      if(doMatch) {
+        req.session.isLogged = true
+        req.session.userName = user.user_name
+        return req.session.save(err => {
+          if(err) console.log(err)
+          return res.redirect('/')
+        })
+      }
+      res.redirect('/login')
     })
     .catch(err => console.log(err))
 })
