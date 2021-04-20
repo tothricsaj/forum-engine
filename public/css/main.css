@@ -10,7 +10,7 @@ html, body {
   background-color: var(--grey-green);
 }
 
-h2 {
+h2, h3 {
   color: var(--dark-green);
 }
 
@@ -65,6 +65,18 @@ a {
   background-color: var(--btn-bg);
   color: var(--white-green);
   cursor: pointer;
+}
+
+.button__nav {
+  background-color: unset;
+}
+
+.button__nav:hover {
+  background-color: var(--white-green);
+}
+
+.button__nav:hover a {
+  color: var(--dark-green);
 }
 
 .button a {

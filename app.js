@@ -43,6 +43,7 @@ app.use(csrfProtection)
 
 app.use((req, res, next) => {
   res.locals.isAuthenticated = req.session.isLogged
+  res.locals.userName = req.session.userName
   res.locals.csrfToken = req.csrfToken()
   next()
 })
@@ -54,7 +55,6 @@ app.get('/', (req, res, next) => {
       .then(dbRes => {
         return res.render('home', {
           topics: dbRes.rows,
-          userName: req.session.userName
         })
       })
       .catch(err => console.log(err))
@@ -190,6 +190,12 @@ app.post('/registration', (req, res, next) => {
       }
     })
     .catch(err => console.log(err))
+})
+
+app.get('/user/:userName/comments', isAuth, (req, res, next) => {
+  res.render('user-comments', {
+    userName: req.session.userName
+  })
 })
 
 app.listen(port)

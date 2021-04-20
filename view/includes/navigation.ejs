@@ -2,6 +2,7 @@
   <h2><a href="/">Home</a></h2>
   <ul>
     <% if(isAuthenticated) { %> 
+      <li class="button button__nav"><a href="/user/<%= userName %>/comments">Comments</a></li>
       <li class="button"><a href="/logout">Logout</a></li>
     <% } else { %> 
       <li class="button"><a href="/login">Login</a></li>
