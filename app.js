@@ -193,9 +193,26 @@ app.post('/registration', (req, res, next) => {
 })
 
 app.get('/user/:userName/comments', isAuth, (req, res, next) => {
-  res.render('user-comments', {
-    userName: req.session.userName
-  })
+  const query = `
+    SELECT comment.title, comment.comment_txt, comment.created_at, user_profile.user_name 
+    FROM comment
+    INNER JOIN user_profile ON comment.owner=user_profile.user_name
+    WHERE user_name=$1
+  `
+  db
+    .query(
+      query,
+      [req.session.userName]
+    )
+    .then(dbRes => {
+      console.log(dbRes.rows)
+      res.render('user-comments', {
+        userName: req.session.userName,
+        comments: dbRes.rows
+      })
+    })
+    .catch(err => console.log(err))
+
 })
 
 app.listen(port)
